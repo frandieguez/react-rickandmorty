@@ -1,39 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Card from "../card/Card";
 import styles from "./home.module.css";
-import axios from "axios";
+import { connect } from "react-redux";
 
-let URL = "https://rickandmortyapi.com/api";
-
-function getCharacters(callback: Function) {
-  return axios.get(`${URL}/character`).then((res) => {
-    callback(res.data.results);
-  });
-}
-
-const Home: React.FC = () => {
-  let [chars, setChars] = useState([]);
-
-  useEffect(() => {
-    getCharacters(setChars);
-  }, []);
-
-  function nextChar() {
-    chars.shift();
-    if (!chars.length) {
-      //get more characters
-    }
-
-    setChars([...chars]);
-  }
-
+const Home: React.FC<{ chars: Array<Character> }> = ({ chars = [] }) => {
+  let char = chars[0];
   return (
     <div className={styles.container}>
       <h2>Rick and Morty characters</h2>
-      <div>
-        <Card leftClick={nextChar} {...chars[0]} />
-      </div>
+      <div>{<Card leftClick={() => {}} {...char} />}</div>
     </div>
   );
 };
-export default Home;
+
+const mapState = (state: any) => {
+  return {
+    chars: state.characters.characters,
+  };
+};
+export default connect(mapState)(Home);
