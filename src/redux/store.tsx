@@ -1,10 +1,11 @@
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
 import userReducer from "./userDuck";
-import charactersReducer from "./charactersDuck";
+import charactersReducer, { getCharactersAction } from "./charactersDuck";
 import thunk from "redux-thunk";
 
 const rootReducer = combineReducers({
   user: userReducer,
+  characters: charactersReducer,
 });
 
 export const composeEnhancers =
@@ -15,6 +16,9 @@ const generateStore = () => {
     rootReducer,
     composeEnhancers(applyMiddleware(thunk))
   );
+
+  // Dirty hack to call the action on application boot
+  getCharactersAction()(store.dispatch, store.getState);
 
   return store;
 };
