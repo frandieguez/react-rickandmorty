@@ -2,8 +2,6 @@ import React from "react";
 import styles from "./card.module.css";
 import FontAwesome from "react-fontawesome";
 
-let rick = "https://rickandmortyapi.com/api/character/avatar/1.jpeg";
-
 const onClick = (side: string) => {
   return () => console.log(side);
 };
@@ -17,9 +15,9 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({
   name = "Rick Sanches",
-  image = rick,
-  rightClick,
-  leftClick,
+  image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+  rightClick = () => {},
+  leftClick = () => {},
 }) => {
   return (
     <div className={styles.container}>
@@ -29,7 +27,7 @@ const Card: React.FC<CardProps> = ({
         <div className={styles.actions}>
           <div
             onClick={() => {
-              leftClick || onClick("left");
+              leftClick() || onClick("left");
             }}
             className={styles.left}
           >
@@ -37,7 +35,7 @@ const Card: React.FC<CardProps> = ({
           </div>
           <div
             onClick={() => {
-              rightClick || onClick("right");
+              rightClick() || onClick("right");
             }}
             className={styles.right}
           >
