@@ -1,15 +1,55 @@
 import React from "react";
 import styles from "./login.module.css";
+import { connect } from "react-redux";
+import { doGoogleLoginAction, logoutAction } from "../../redux/userDuck";
 
-const LoginPage: React.FC = () => {
+const LoginPage: React.FC<{
+  doGoogleLoginAction: Function;
+  logoutAction: Function;
+  fetching: boolean;
+  loggedIn: boolean;
+}> = ({ doGoogleLoginAction, logoutAction, fetching, loggedIn }) => {
+  if (fetching) return <h2>Cargando...</h2>;
   return (
     <div className={styles.container}>
-      <h1>Sign in with Google</h1>
-      <h1>Sign out</h1>
-      <button>Start</button>
-      <button>Sign out</button>
+      <pre>
+        <code>{loggedIn}</code>
+      </pre>
+      {!loggedIn ? (
+        <>
+          <h1>Sign in with Google</h1>
+          <button
+            onClick={() => {
+              doGoogleLoginAction();
+            }}
+          >
+            Start
+          </button>
+        </>
+      ) : (
+        <>
+          <h1>Sign out</h1>
+          <button
+            onClick={() => {
+              logoutAction();
+            }}
+          >
+            Sign out
+          </button>
+        </>
+      )}
     </div>
   );
 };
 
-export default LoginPage;
+const mapState = ({ user: { fetching, loggedIn } }: any) => {
+  console.log(loggedIn);
+  return {
+    fetching,
+    loggedIn,
+  };
+};
+
+export default connect(mapState, { doGoogleLoginAction, logoutAction })(
+  LoginPage
+);
