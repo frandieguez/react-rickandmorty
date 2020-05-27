@@ -2,13 +2,14 @@ import React from "react";
 import styles from "./card.module.css";
 import FontAwesome from "react-fontawesome";
 
-const onClick = (side: string) => {
-  return () => console.log(side);
+const logSide = (side: string) => {
+  console.log(side);
 };
 
 interface CardProps {
   name: string;
   image: string;
+  hide?: boolean;
   rightClick?: Function;
   leftClick?: Function;
 }
@@ -16,6 +17,7 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({
   name = "Rick Sanches",
   image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+  hide = false,
   rightClick = () => {},
   leftClick = () => {},
 }) => {
@@ -24,24 +26,16 @@ const Card: React.FC<CardProps> = ({
       <div className={styles.card}>
         <img alt="rick" src={image} />
         <p className={styles.name}>{name}</p>
-        <div className={styles.actions}>
-          <div
-            onClick={() => {
-              leftClick() || onClick("left");
-            }}
-            className={styles.left}
-          >
-            <FontAwesome name="thumbs-down" size="2x" />
+        {!hide && (
+          <div className={styles.actions}>
+            <div onClick={() => leftClick()} className={styles.left}>
+              <FontAwesome name="thumbs-down" size="2x" />
+            </div>
+            <div onClick={() => rightClick()} className={styles.right}>
+              <FontAwesome name="heart" size="2x" />
+            </div>
           </div>
-          <div
-            onClick={() => {
-              rightClick() || onClick("right");
-            }}
-            className={styles.right}
-          >
-            <FontAwesome name="heart" size="2x" />
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

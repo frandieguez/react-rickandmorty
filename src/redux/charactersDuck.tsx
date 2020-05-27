@@ -6,6 +6,7 @@ const initialData = {
   characters: [],
   currentChar: null,
   error: null,
+  favorites: [],
 };
 
 export const LOGIN = "LOGIN";
@@ -13,6 +14,7 @@ export const GET_CHARACTERS = "GET_CHARACTERS";
 export const GET_CHARACTERS_SUCCESS = "GET_CHARACTERS_SUCCESS";
 export const GET_CHARACTERS_ERROR = "GET_CHARACTERS_ERROR";
 export const REMOVE_CHARACTER = "REMOVE_CHARACTER";
+export const ADD_TO_FAVORITES = "ADD_TO_FAVORITES";
 
 const URL = "https://rickandmortyapi.com/api/character";
 
@@ -27,6 +29,8 @@ const reducer = (state = initialData, action: any) => {
       return { ...state, ...{ characters: action.payload, fetching: false } };
     case REMOVE_CHARACTER:
       return { ...state, characters: action.payload };
+    case ADD_TO_FAVORITES:
+      return { ...state, ...action.payload };
     default:
       return state;
   }
@@ -59,4 +63,23 @@ export const removeCharacterAction = (index: number) => (
   characters.splice(index, 1);
 
   dispatch({ type: REMOVE_CHARACTER, payload: [...characters] });
+};
+
+export const addToFavoritesAction = () => (
+  dispatch: Function,
+  getState: Function
+) => {
+  let { characters, favorites } = getState().characters;
+
+  let char = characters.shift();
+  favorites.push(char);
+
+  // I have to [...characters] due to redux state inmutability,
+  // Redux compares if original array and new state array are the same
+  // Here we deconstruct the chars and favorites directly from state and
+  // we pass it back directly to redux.
+  dispatch({
+    type: ADD_TO_FAVORITES,
+    payload: { characters: [...characters], favorites: [...favorites] },
+  });
 };
