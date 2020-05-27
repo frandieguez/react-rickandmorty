@@ -40,7 +40,6 @@ const saveStorage = (storage: Object) => {
 export const restoreSessionAction = () => (dispatch: Dispatch) => {
   let storage = localStorage.getItem("storage") || "{}";
   storage = JSON.parse(storage);
-  console.log("hello", storage);
   if (storage && storage.hasOwnProperty("user")) {
     dispatch({ type: LOGIN_SUCCESS, payload: storage });
   }
