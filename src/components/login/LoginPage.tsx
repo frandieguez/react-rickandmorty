@@ -43,7 +43,6 @@ const LoginPage: React.FC<{
 };
 
 const mapState = ({ user: { fetching, loggedIn } }: any) => {
-  console.log(loggedIn);
   return {
     fetching,
     loggedIn,

@@ -1,5 +1,11 @@
 import { loginWithGoogle, signOutGoogle } from "../services/firebase";
 import { Dispatch } from "redux";
+import { retrieveFavoritesAction } from "./charactersDuck";
+import {
+  saveStorage,
+  getStorage,
+  removeFromStorage,
+} from "../services/localstorage";
 
 // constants
 const initialData = {
@@ -31,24 +37,18 @@ const reducer = (state = initialData, action: any) => {
 
 export default reducer;
 
-// Auxiliar functions
-const saveStorage = (storage: Object) => {
-  localStorage.storage = JSON.stringify(storage);
-};
-
 // action creators
 export const restoreSessionAction = () => (dispatch: Dispatch) => {
-  let storage = localStorage.getItem("storage") || "{}";
-  storage = JSON.parse(storage);
-  if (storage && storage.hasOwnProperty("user")) {
-    dispatch({ type: LOGIN_SUCCESS, payload: storage });
+  let previousSession = getStorage("user");
+  if (previousSession) {
+    dispatch({ type: LOGIN_SUCCESS, payload: previousSession });
   }
 };
 
 export const logoutAction = () => (dispatch: Dispatch, getState: Function) => {
   signOutGoogle();
   dispatch({ type: LOG_OUT });
-  localStorage.removeItem("storage");
+  removeFromStorage();
 };
 
 export const doGoogleLoginAction = () => (
@@ -69,7 +69,8 @@ export const doGoogleLoginAction = () => (
         },
       });
 
-      saveStorage(getState());
+      saveStorage("user", getState());
+      retrieveFavoritesAction()(dispatch, getState);
     })
     .catch((e) => {
       dispatch({

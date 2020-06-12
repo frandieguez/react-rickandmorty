@@ -1,4 +1,6 @@
 import axios from "axios";
+import { updateDB, getFavoriteCharacters } from "../services/firebase";
+import { saveStorage, getStorage } from "../services/localstorage";
 
 // constants
 const initialData = {
@@ -15,6 +17,9 @@ export const GET_CHARACTERS_SUCCESS = "GET_CHARACTERS_SUCCESS";
 export const GET_CHARACTERS_ERROR = "GET_CHARACTERS_ERROR";
 export const REMOVE_CHARACTER = "REMOVE_CHARACTER";
 export const ADD_TO_FAVORITES = "ADD_TO_FAVORITES";
+export const GET_FAVS = "GET_FAVS";
+export const GET_FAVS_ERROR = "GET_FAVS_ERROR";
+export const GET_FAVS_SUCCESS = "GET_FAVS_SUCCESS";
 
 const URL = "https://rickandmortyapi.com/api/character";
 
@@ -31,6 +36,24 @@ const reducer = (state = initialData, action: any) => {
       return { ...state, characters: action.payload };
     case ADD_TO_FAVORITES:
       return { ...state, ...action.payload };
+    case GET_FAVS:
+      return {
+        ...state,
+        fetching: true,
+        error: null,
+      };
+
+    case GET_FAVS_ERROR:
+      return { ...state, ...{ fetching: false, error: action.payload } };
+    case GET_FAVS_SUCCESS:
+      return {
+        ...state,
+        ...{
+          characters: action.payload,
+          fetching: false,
+          favorites: action.payload,
+        },
+      };
     default:
       return state;
   }
@@ -65,6 +88,29 @@ export const removeCharacterAction = (index: number) => (
   dispatch({ type: REMOVE_CHARACTER, payload: [...characters] });
 };
 
+export const retrieveFavoritesAction = () => (
+  dispatch: Function,
+  getState: Function
+) => {
+  dispatch({ type: GET_FAVS });
+
+  let { uid } = getState().user;
+  getFavoriteCharacters(uid)
+    .then((array) => {
+      dispatch({ type: GET_FAVS_SUCCESS, payload: [...array] });
+    })
+    .catch((e) => {
+      console.log({ e });
+      dispatch({ type: GET_FAVS_ERROR, payload: e.message });
+    });
+};
+
+// export const restoreFavoritesAction = () => (dispatch: Function) => {
+//   let favorites = getStorage("favorites");
+//   console.log({ favorites });
+//   dispatch({ type: GET_FAVS_SUCCESS, payload: favorites });
+// };
+
 export const addToFavoritesAction = () => (
   dispatch: Function,
   getState: Function
@@ -73,6 +119,11 @@ export const addToFavoritesAction = () => (
 
   let char = characters.shift();
   favorites.push(char);
+
+  // Save to firebase
+  let { uid } = getState().user;
+  updateDB(favorites, uid);
+  saveStorage("favorites", favorites);
 
   // I have to [...characters] due to redux state inmutability,
   // Redux compares if original array and new state array are the same
