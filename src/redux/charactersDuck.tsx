@@ -1,6 +1,6 @@
 import axios from "axios";
 import { updateDB, getFavoriteCharacters } from "../services/firebase";
-import { saveStorage, getStorage } from "../services/localstorage";
+import { saveStorage } from "../services/localstorage";
 
 // constants
 const initialData = {

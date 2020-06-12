@@ -2,10 +2,6 @@ import React from "react";
 import styles from "./card.module.css";
 import FontAwesome from "react-fontawesome";
 
-const logSide = (side: string) => {
-  console.log(side);
-};
-
 interface CardProps {
   name: string;
   image: string;
