@@ -27,7 +27,6 @@ const LoginPage: React.FC<{
       <p>Let's rate some Rick and Morty characters, just login with google</p>
       {!loggedIn ? (
         <>
-          <h3>Sign in with Google</h3>
           <a
             onClick={() => {
               doGoogleLoginAction();

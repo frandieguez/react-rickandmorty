@@ -30,7 +30,9 @@ const Home: React.FC<{
 
 const mapState = (state: any) => {
   return {
-    chars: state.characters.characters,
+    chars: state.characters.characters.filter((item: Character) => {
+      return !state.characters.favorites.includes(item);
+    }),
   };
 };
 

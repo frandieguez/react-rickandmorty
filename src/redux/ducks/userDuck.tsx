@@ -42,10 +42,15 @@ const reducer = (state = initialData, action: any) => {
 export default reducer;
 
 // action creators
-export const restoreSessionAction = () => (dispatch: Dispatch) => {
+export const restoreSessionAction = () => (
+  dispatch: Dispatch,
+  getState: Function
+) => {
   let previousSession = getStorage("user");
+
   if (previousSession) {
-    dispatch({ type: LOGIN_SUCCESS, payload: previousSession?.user });
+    dispatch({ type: LOGIN_SUCCESS, payload: previousSession });
+    retrieveFavoritesAction()(dispatch, getState);
   }
 };
 
@@ -73,7 +78,7 @@ export const doGoogleLoginAction = () => (
         },
       });
 
-      saveStorage("user", getState());
+      saveStorage("user", getState().user);
       retrieveFavoritesAction()(dispatch, getState);
     })
     .catch((e) => {

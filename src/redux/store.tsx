@@ -23,7 +23,7 @@ const generateStore = () => {
   // Dirty hack to call the action on application boot
   getCharactersAction()(store.dispatch, store.getState);
 
-  restoreSessionAction()(store.dispatch);
+  restoreSessionAction()(store.dispatch, store.getState);
 
   return store;
 };

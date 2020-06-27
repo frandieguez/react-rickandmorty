@@ -58,3 +58,7 @@
 .active {
   background-color: lightseagreen;
 }
+
+a {
+  cursor: pointer;
+}

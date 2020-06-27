@@ -116,13 +116,12 @@ export const addToFavoritesAction = () => (
   let { characters, favorites } = getState().characters;
 
   let char = characters.shift();
-  favorites.push(char);
-  console.log(favorites);
+  let newFavorites = [...favorites, char];
 
   // Save to firebase
   let { uid } = getState().user;
-  updateDB(favorites, uid);
-  saveStorage("favorites", favorites);
+  updateDB(newFavorites, uid);
+  // saveStorage("favorites", newFavorites);
 
   // I have to [...characters] due to redux state inmutability,
   // Redux compares if original array and new state array are the same
@@ -130,6 +129,6 @@ export const addToFavoritesAction = () => (
   // we pass it back directly to redux.
   dispatch({
     type: ADD_TO_FAVORITES,
-    payload: { characters: [...characters], favorites: [...favorites] },
+    payload: { characters: [...characters], favorites: [...newFavorites] },
   });
 };
