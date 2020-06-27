@@ -1,6 +1,14 @@
 // Auxiliar functions
 export const saveStorage = (key: string, storage: Object) => {
-  localStorage.storage = JSON.stringify(storage);
+  if (key) {
+    let newContents = JSON.stringify({
+      ...localStorage.storage,
+      [key]: storage,
+    });
+    localStorage.setItem("storage", newContents);
+  } else {
+    localStorage.storage = JSON.stringify(storage);
+  }
 };
 
 export const getStorage = (key: string) => {

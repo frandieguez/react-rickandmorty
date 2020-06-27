@@ -1,6 +1,6 @@
 import axios from "axios";
-import { updateDB, getFavoriteCharacters } from "../services/firebase";
-import { saveStorage } from "../services/localstorage";
+import { updateDB, getFavoriteCharacters } from "../../services/firebase";
+import { saveStorage, getStorage } from "../../services/localstorage";
 
 // constants
 const initialData = {
@@ -49,7 +49,6 @@ const reducer = (state = initialData, action: any) => {
       return {
         ...state,
         ...{
-          characters: action.payload,
           fetching: false,
           favorites: action.payload,
         },
@@ -105,11 +104,10 @@ export const retrieveFavoritesAction = () => (
     });
 };
 
-// export const restoreFavoritesAction = () => (dispatch: Function) => {
-//   let favorites = getStorage("favorites");
-//   console.log({ favorites });
-//   dispatch({ type: GET_FAVS_SUCCESS, payload: favorites });
-// };
+export const restoreFavoritesAction = () => (dispatch: Function) => {
+  let favorites = getStorage("favorites");
+  dispatch({ type: GET_FAVS_SUCCESS, payload: favorites || [] });
+};
 
 export const addToFavoritesAction = () => (
   dispatch: Function,
@@ -119,6 +117,7 @@ export const addToFavoritesAction = () => (
 
   let char = characters.shift();
   favorites.push(char);
+  console.log(favorites);
 
   // Save to firebase
   let { uid } = getState().user;

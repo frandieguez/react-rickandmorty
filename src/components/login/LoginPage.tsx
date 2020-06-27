@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./login.module.css";
 import { connect } from "react-redux";
-import { doGoogleLoginAction, logoutAction } from "../../redux/userDuck";
+import { doGoogleLoginAction, logoutAction } from "../../redux/ducks/userDuck";
 
 const LoginPage: React.FC<{
   doGoogleLoginAction: Function;

@@ -1,17 +1,21 @@
-import { loginWithGoogle, signOutGoogle } from "../services/firebase";
+import { loginWithGoogle, signOutGoogle } from "../../services/firebase";
 import { Dispatch } from "redux";
 import { retrieveFavoritesAction } from "./charactersDuck";
 import {
   saveStorage,
   getStorage,
   removeFromStorage,
-} from "../services/localstorage";
+} from "../../services/localstorage";
 
 // constants
 const initialData = {
   loggedIn: false,
   fetching: false,
   error: null,
+  uid: null,
+  displayName: null,
+  email: null,
+  photoUrl: null,
 };
 
 export const LOGIN = "LOGIN";
@@ -41,7 +45,7 @@ export default reducer;
 export const restoreSessionAction = () => (dispatch: Dispatch) => {
   let previousSession = getStorage("user");
   if (previousSession) {
-    dispatch({ type: LOGIN_SUCCESS, payload: previousSession });
+    dispatch({ type: LOGIN_SUCCESS, payload: previousSession?.user });
   }
 };
 

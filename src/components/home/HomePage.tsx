@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import {
   removeCharacterAction,
   addToFavoritesAction,
-} from "../../redux/charactersDuck";
+} from "../../redux/ducks/charactersDuck";
 
 const Home: React.FC<{
   chars: Array<Character>;

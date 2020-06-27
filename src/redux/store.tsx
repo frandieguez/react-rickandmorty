@@ -1,6 +1,9 @@
 import { createStore, combineReducers, compose, applyMiddleware } from "redux";
-import userReducer, { restoreSessionAction } from "./userDuck";
-import charactersReducer, { getCharactersAction } from "./charactersDuck";
+import userReducer, { restoreSessionAction } from "./ducks/userDuck";
+import charactersReducer, {
+  getCharactersAction,
+  restoreFavoritesAction,
+} from "./ducks/charactersDuck";
 import thunk from "redux-thunk";
 
 const rootReducer = combineReducers({
