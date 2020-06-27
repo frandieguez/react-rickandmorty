@@ -1,6 +1,7 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Home from "./components/home/HomePage";
+import GraphHome from "./components/home/GraphHome";
 import FavPage from "./components/favs/FavPage";
 import LoginPage from "./components/login/LoginPage";
 
@@ -20,7 +21,8 @@ let PrivateRoute: React.FC<any> = ({ path, component, ...rest }) => {
 const Routes: React.FC = () => {
   return (
     <Switch>
-      <PrivateRoute exact path="/" component={Home} />
+      {/* <PrivateRoute exact path="/" component={Home} /> */}
+      <PrivateRoute exact path="/" component={GraphHome} />
       <PrivateRoute path="/favs" component={FavPage} />
       <Route path="/login" component={LoginPage} />
     </Switch>
