@@ -8,27 +8,40 @@ const LoginPage: React.FC<{
   logoutAction: Function;
   fetching: boolean;
   loggedIn: boolean;
-}> = ({ doGoogleLoginAction, logoutAction, fetching, loggedIn }) => {
+  displayName: string;
+}> = ({
+  doGoogleLoginAction,
+  logoutAction,
+  fetching,
+  loggedIn,
+  displayName,
+}) => {
   if (fetching) return <h2>Cargando...</h2>;
   return (
     <div className={styles.container}>
-      <pre>
-        <code>{loggedIn}</code>
-      </pre>
+      <img
+        src="http://assets.stickpng.com/images/58f37720a4fa116215a9240f.png"
+        alt=""
+        width="300px"
+      />
+      <p>Let's rate some Rick and Morty characters, just login with google</p>
       {!loggedIn ? (
         <>
-          <h1>Sign in with Google</h1>
-          <button
+          <h3>Sign in with Google</h3>
+          <a
             onClick={() => {
               doGoogleLoginAction();
             }}
           >
-            Start
-          </button>
+            <img
+              src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png"
+              alt=""
+            />
+          </a>
         </>
       ) : (
         <>
-          <h1>Sign out</h1>
+          <h3>Hi {displayName}</h3>
           <button
             onClick={() => {
               logoutAction();
@@ -42,10 +55,11 @@ const LoginPage: React.FC<{
   );
 };
 
-const mapState = ({ user: { fetching, loggedIn } }: any) => {
+const mapState = ({ user: { fetching, loggedIn, displayName } }: any) => {
   return {
     fetching,
     loggedIn,
+    displayName,
   };
 };
 
