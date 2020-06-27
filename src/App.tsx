@@ -2,8 +2,12 @@ import * as React from "react";
 import "./App.css";
 import { NavLink } from "react-router-dom";
 import Routes from "./Routes";
+import { connect } from "react-redux";
 
-const App = () => {
+const App: React.FC<{ loggedIn: boolean; displayName: string }> = ({
+  loggedIn,
+  displayName,
+}) => {
   return (
     <div>
       <div className="nav-bar">
@@ -19,7 +23,7 @@ const App = () => {
           Favorites
         </NavLink>
         <NavLink className="link" activeClassName="active" to="/login">
-          Login
+          {loggedIn ? `Hi ${displayName}` : "Login"}
         </NavLink>
       </div>
       <Routes />
@@ -27,4 +31,8 @@ const App = () => {
   );
 };
 
-export default App;
+const mapState = (state: any) => {
+  return { loggedIn: state.user.loggedIn, displayName: state.user.displayName };
+};
+
+export default connect(mapState, {})(App);
