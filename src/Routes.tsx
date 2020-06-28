@@ -1,9 +1,9 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import Home from "./components/home/HomePage";
-import GraphHome from "./components/home/GraphHome";
-import FavPage from "./components/favs/FavPage";
-import LoginPage from "./components/login/LoginPage";
+
+const Home = lazy(() => import("./components/home/HomePage"));
+const FavPage = lazy(() => import("./components/favs/FavPage"));
+const LoginPage = lazy(() => import("./components/login/LoginPage"));
 
 // I have implemented this in a rought way... better to connect it to redux directly
 let PrivateRoute: React.FC<any> = ({ path, component, ...rest }) => {
@@ -20,12 +20,14 @@ let PrivateRoute: React.FC<any> = ({ path, component, ...rest }) => {
 
 const Routes: React.FC = () => {
   return (
-    <Switch>
-      {/* <PrivateRoute exact path="/" component={Home} /> */}
-      <PrivateRoute exact path="/" component={GraphHome} />
-      <PrivateRoute path="/favs" component={FavPage} />
-      <Route path="/login" component={LoginPage} />
-    </Switch>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Switch>
+        <PrivateRoute exact path="/" component={Home} />
+        {/* <PrivateRoute exact path="/" component={GraphHome} /> */}
+        <PrivateRoute path="/favs" component={FavPage} />
+        <Route path="/login" component={LoginPage} />
+      </Switch>
+    </Suspense>
   );
 };
 export default Routes;
