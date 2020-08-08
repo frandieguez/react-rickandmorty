@@ -23,8 +23,8 @@ const Routes: React.FC = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Switch>
-        {/* <PrivateRoute exact path="/" component={Home} /> */}
-        <PrivateRoute exact path="/" component={GraphHome} />
+        <PrivateRoute exact path="/" component={Home} />
+        {/* <PrivateRoute exact path="/" component={GraphHome} /> */}
         <PrivateRoute path="/favs" component={FavPage} />
         <Route path="/login" component={LoginPage} />
       </Switch>

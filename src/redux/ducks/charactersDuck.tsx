@@ -1,3 +1,4 @@
+import ApolloClient, { gql } from "apollo-boost";
 import axios from "axios";
 import { updateDB, getFavoriteCharacters } from "../../services/firebase";
 import { saveStorage, getStorage } from "../../services/localstorage";
@@ -22,6 +23,8 @@ export const GET_FAVS_ERROR = "GET_FAVS_ERROR";
 export const GET_FAVS_SUCCESS = "GET_FAVS_SUCCESS";
 
 const URL = "https://rickandmortyapi.com/api/character";
+
+let client = new ApolloClient({ uri: "https://rickandmortyapi.com/graphql" });
 
 // reducer
 const reducer = (state = initialData, action: any) => {
@@ -67,13 +70,26 @@ export const getCharactersAction = () => (
 ) => {
   dispatch({ type: GET_CHARACTERS });
 
-  return axios
-    .get(URL)
-    .then((res) => {
-      dispatch({ type: GET_CHARACTERS_SUCCESS, payload: res.data.results });
+  let query = gql`
+    {
+      characters {
+        results {
+          name
+          image
+        }
+      }
+    }
+  `;
+  return client
+    .query({ query })
+    .then(({ data }) => {
+      dispatch({
+        type: GET_CHARACTERS_SUCCESS,
+        payload: data.characters.results,
+      });
     })
     .catch((err) => {
-      dispatch({ type: GET_CHARACTERS_ERROR, payload: err.response.message });
+      dispatch({ type: GET_CHARACTERS_ERROR, payload: err });
     });
 };
 
