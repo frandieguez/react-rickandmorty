@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 const Home = lazy(() => import("./components/home/HomePage"));
+const GraphHome = lazy(() => import("./components/home/GraphHomePage"));
 const FavPage = lazy(() => import("./components/favs/FavPage"));
 const LoginPage = lazy(() => import("./components/login/LoginPage"));
 
@@ -22,8 +23,8 @@ const Routes: React.FC = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Switch>
-        <PrivateRoute exact path="/" component={Home} />
-        {/* <PrivateRoute exact path="/" component={GraphHome} /> */}
+        {/* <PrivateRoute exact path="/" component={Home} /> */}
+        <PrivateRoute exact path="/" component={GraphHome} />
         <PrivateRoute path="/favs" component={FavPage} />
         <Route path="/login" component={LoginPage} />
       </Switch>

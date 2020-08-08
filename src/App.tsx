@@ -11,17 +11,21 @@ const App: React.FC<{ loggedIn: boolean; displayName: string }> = ({
   return (
     <div>
       <div className="nav-bar">
-        <NavLink className="link" activeClassName="active" exact to="/">
-          Index
-        </NavLink>
-        <NavLink
-          className="link
-        "
-          activeClassName="active"
-          to="/favs"
-        >
-          Favorites
-        </NavLink>
+        {loggedIn && (
+          <>
+            <NavLink className="link" activeClassName="active" exact to="/">
+              Index
+            </NavLink>
+            <NavLink
+              className="link
+          "
+              activeClassName="active"
+              to="/favs"
+            >
+              Favorites
+            </NavLink>
+          </>
+        )}
         <NavLink className="link" activeClassName="active" to="/login">
           {loggedIn ? `Hi ${displayName}` : "Login"}
         </NavLink>
